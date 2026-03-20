@@ -1,3 +1,35 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-yellow: #FFF500;
+  --color-brand-lavender: #C199FF;
+  --color-brand-dark: #000000;
+  --color-brand-neutral: #1A1A1A;
+  
+  --radius-4xl: 2.5rem;
+  --radius-5xl: 3rem;
+  
+  --animate-spin-slow: spin 20s linear infinite;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-white antialiased;
+    font-family: 'Outfit', sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-neutral-950/80 backdrop-blur-3xl border border-white/5 rounded-4xl shadow-2xl;
+  }
+  .brand-shadow-yellow {
+    box-shadow: 0 0 40px -10px rgba(255, 245, 0, 0.4);
+  }
+  .brand-shadow-lavender {
+    box-shadow: 0 0 40px -10px rgba(193, 153, 255, 0.4);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

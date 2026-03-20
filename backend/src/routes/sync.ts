@@ -1,10 +1,18 @@
 import { Router } from 'express';
+import { authenticate, AuthRequest } from '../middleware/auth';
 import { validateSync } from '../middleware/validation';
-import { prisma } from '../prisma/client';
+import { prisma } from '../../prisma/client';
+import { rateLimit } from 'express-rate-limit';
 
 const router = Router();
 
-router.post('/sync', validateSync, async (req, res) => {
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, 
+  max: 30, // Limit to 30 syncs per minute per user 
+  message: 'Too many requests, please try again after a minute',
+});
+
+router.post('/sync', limiter, authenticate, validateSync, async (req: AuthRequest, res) => {
   const data = (req as any).validated;
   try {
     await prisma.dailyScore.upsert({
@@ -12,7 +20,6 @@ router.post('/sync', validateSync, async (req, res) => {
       update: {
         score: data.score,
         timeTaken: data.timeTaken,
-        streak: data.streak,
         hintsUsed: data.hintsUsed,
         hintsRemaining: data.hintsRemaining
       },
@@ -21,7 +28,6 @@ router.post('/sync', validateSync, async (req, res) => {
         date: new Date(data.date),
         score: data.score,
         timeTaken: data.timeTaken,
-        streak: data.streak,
         hintsUsed: data.hintsUsed,
         hintsRemaining: data.hintsRemaining
       }
