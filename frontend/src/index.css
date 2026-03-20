@@ -3,6 +3,8 @@
 @theme {
   --color-brand-yellow: #FFF500;
   --color-brand-lavender: #C199FF;
+  --color-brand-cyan: #00F0FF;
+  --color-brand-ruby: #FF006B;
   --color-brand-dark: #000000;
   --color-brand-neutral: #1A1A1A;
   
@@ -10,6 +12,13 @@
   --radius-5xl: 3rem;
   
   --animate-spin-slow: spin 20s linear infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
 }
 
 @layer base {

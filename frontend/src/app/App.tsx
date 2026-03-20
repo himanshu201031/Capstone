@@ -18,8 +18,18 @@ const App: React.FC = () => {
   const date = useSelector((state: RootState) => state.puzzle.date);
   const dispatch = useDispatch();
 
+  const isLoggedIn = !!localStorage.getItem('token');
+
   // Initialize syncing
   useSync();
+
+  // Redirect if not logged in and trying to access protected states
+  useEffect(() => {
+    const protectedStates = ['idle', 'playing', 'leaderboard', 'completed'];
+    if (!isLoggedIn && protectedStates.includes(status)) {
+        dispatch(setStatus('landing'));
+    }
+  }, [status, isLoggedIn, dispatch]);
 
   // Alternate puzzle types daily
   const isSequenceDay = new Date(date).getDate() % 2 === 0;
@@ -32,6 +42,7 @@ const App: React.FC = () => {
       {/* Immersive Brand Background */}
       <div className="fixed top-[-30%] right-[-10%] w-[80%] h-[80%] bg-brand-lavender/15 blur-[160px] rounded-full pointer-events-none" />
       <div className="fixed bottom-[-20%] left-[-10%] w-[60%] h-[60%] bg-brand-yellow/5 blur-[160px] rounded-full pointer-events-none" />
+      <div className="fixed top-[-10%] left-1/2 -translate-x-1/2 w-[40%] h-[40%] bg-brand-cyan/10 blur-[130px] rounded-full pointer-events-none animate-pulse-slow" />
       
       {/* Stylized Swirl/Circle Overlay */}
       <div className="fixed top-10 right-[-10rem] w-[40rem] h-[40rem] border-[40px] border-brand-lavender/10 rounded-full blur-3xl pointer-events-none" />
@@ -39,12 +50,12 @@ const App: React.FC = () => {
       <main className="relative z-10 h-full w-full overflow-y-auto no-scrollbar overflow-x-hidden">
         <AnimatePresence mode="wait">
           {status === 'landing' && <Landing key="landing" />}
-          {status === 'idle' && <Home key="home" />}
-          {status === 'playing' && (
+          {isLoggedIn && status === 'idle' && <Home key="home" />}
+          {isLoggedIn && status === 'playing' && (
             isSequenceDay ? <SequencePuzzle key="seq" /> : <GridPuzzle key="grid" />
           )}
-          {status === 'completed' && <Result key="result" />}
-          {status === 'leaderboard' && (
+          {isLoggedIn && status === 'completed' && <Result key="result" />}
+          {isLoggedIn && status === 'leaderboard' && (
               <Leaderboard key="lead" onBack={() => dispatch(setStatus('idle'))} />
           )}
           {status === 'auth' && <Auth key="auth" />}

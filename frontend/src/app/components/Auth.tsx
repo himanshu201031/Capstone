@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { setStatus } from '../store/puzzleSlice';
+import { GoogleLogin } from '@react-oauth/google';
 
 export const Auth: React.FC = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,25 @@ export const Auth: React.FC = () => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    setLoading(true);
+    setError('');
+    try {
+        const { data } = await axios.post(`http://localhost:4000/api/auth/google`, { 
+            token: credentialResponse.credential 
+        });
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('userId', data.userId);
+        
+        // Force state refresh to App to pick up token
+        window.location.reload(); 
+    } catch (err: any) {
+        setError(err.response?.data?.error || 'Google Login failed');
+    } finally {
+        setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +42,9 @@ export const Auth: React.FC = () => {
         const { data } = await axios.post(`http://localhost:4000${endpoint}`, { email, password });
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
-        dispatch(setStatus('idle'));
+        
+        // Force state refresh to App to pick up token
+        window.location.reload();
     } catch (err: any) {
         setError(err.response?.data?.error || 'Authentication failed');
     } finally {
@@ -32,86 +54,111 @@ export const Auth: React.FC = () => {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
-      className="flex flex-col items-center justify-center min-h-screen pt-20 px-6 no-scrollbar"
+      className="flex flex-col items-center justify-center min-h-screen pt-20 px-6 no-scrollbar selection:bg-brand-ruby/30"
     >
-      <div className="w-full max-w-md bg-neutral-900 border border-white/5 rounded-5xl p-10 shadow-2xl relative overflow-hidden">
-        {/* Background Accent */}
-        <div className="absolute top-0 right-0 w-24 h-24 bg-brand-lavender/10 blur-3xl rounded-full" />
+      <div className="w-full max-w-lg bg-neutral-900 border border-white/5 rounded-[4rem] p-12 md:p-20 shadow-[0_50px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
         
-        <div className="text-center mb-10 relative z-10">
-            <h2 className="text-4xl font-black mb-3 text-white tracking-tighter">
-                {isLogin ? 'Welcome' : 'Join Us'}
+        {/* Multicolored Glow Accents */}
+        <div className="absolute top-[-10%] right-[-10%] w-48 h-48 bg-brand-lavender/10 blur-3xl rounded-full" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-48 h-48 bg-brand-ruby/10 blur-3xl rounded-full" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand-cyan/5 blur-[120px] rounded-full" />
+        
+        <div className="text-center mb-16 relative z-10">
+            <h2 className="text-5xl font-black mb-4 text-white tracking-tighter leading-none">
+                {isLogin ? 'IDENTITY<br/>VOUCH' : 'NEW<br/>NEURAL NODE'}
             </h2>
-            <p className="text-neutral-500 text-sm font-bold uppercase tracking-widest">
-                {isLogin ? 'Access your matrix' : 'Start your journey'}
+            <p className="text-neutral-500 text-xs font-black uppercase tracking-[0.4em] mt-6">
+                {isLogin ? 'Access your training matrix' : 'Sync your cognitive evolution'}
             </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-            <div className="space-y-2">
-                <label className="text-[10px] font-black text-neutral-500 uppercase ml-1 tracking-widest">Identity / Email</label>
+        {/* Google Login Section - Simplified & Professional */}
+        <div className="mb-14 relative z-10 flex flex-col items-center gap-8">
+             <div className="w-full flex justify-center scale-110">
+                 <GoogleLogin 
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => setError('Google Sign-In Error')}
+                    useOneTap
+                    theme="filled_black"
+                    shape="pill"
+                    text={isLogin ? "continue_with" : "signup_with"}
+                 />
+             </div>
+             
+             <div className="flex items-center gap-6 w-full opacity-30">
+                 <div className="h-px bg-white flex-1" />
+                 <span className="text-[10px] font-black tracking-widest uppercase">Encryption Gate</span>
+                 <div className="h-px bg-white flex-1" />
+             </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
+            <div className="space-y-3">
+                <label className="text-[10px] font-black text-neutral-500 uppercase ml-2 tracking-[0.3em]">Credentials / Node ID</label>
                 <input 
                     type="email" 
-                    required 
+                    placeholder="email@vault.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/5 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-brand-lavender/50 transition-all font-bold placeholder:text-neutral-600"
-                    placeholder="name@matrix.com"
+                    required
+                    className="w-full bg-neutral-800/50 border border-white/5 p-6 rounded-[2rem] text-white focus:outline-none focus:border-brand-lavender transition-all placeholder:text-neutral-600 font-bold"
                 />
             </div>
 
-            <div className="space-y-2">
-                <label className="text-[10px] font-black text-neutral-500 uppercase ml-1 tracking-widest">Secret / Password</label>
+            <div className="space-y-3">
+                <label className="text-[10px] font-black text-neutral-500 uppercase ml-2 tracking-[0.3em]">Access Code</label>
                 <input 
                     type="password" 
-                    required 
+                    placeholder="••••••••" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-neutral-800 border border-white/5 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-brand-lavender/50 transition-all font-bold placeholder:text-neutral-600"
-                    placeholder="••••••••"
+                    required
+                    className="w-full bg-neutral-800/50 border border-white/5 p-6 rounded-[2rem] text-white focus:outline-none focus:border-brand-lavender transition-all placeholder:text-neutral-600 font-bold"
                 />
             </div>
 
             <AnimatePresence>
                 {error && (
-                    <motion.p 
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="text-red-400 text-[10px] font-black uppercase tracking-widest ml-1"
+                    <motion.div 
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="bg-brand-ruby/10 border border-brand-ruby/20 p-5 rounded-2xl text-brand-ruby text-[10px] font-black uppercase tracking-widest text-center"
                     >
                         {error}
-                    </motion.p>
+                    </motion.div>
                 )}
             </AnimatePresence>
 
-            <button 
-                type="submit" 
+            <motion.button 
+                whileHover={{ scale: 1.02, backgroundColor: isLogin ? '#FFF500' : '#00F0FF' }}
+                whileTap={{ scale: 0.98 }}
                 disabled={loading}
-                className={`w-full ${isLogin ? 'bg-brand-yellow text-black' : 'bg-brand-lavender text-black'} font-black py-5 rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl disabled:opacity-50 text-lg`}
+                className={`w-full ${isLogin ? 'bg-brand-yellow' : 'bg-brand-cyan'} text-black font-black py-7 rounded-[2rem] text-lg shadow-2xl transition-colors disabled:opacity-50 tracking-tighter`}
             >
-                {loading ? 'SYNCING...' : (isLogin ? 'SIGN IN' : 'INITIALIZE')}
-            </button>
+                {loading ? 'PROCESSING...' : isLogin ? 'AUTHORIZE ACCESS' : 'INITIALIZE NODE'}
+            </motion.button>
         </form>
 
-        <div className="mt-10 text-center relative z-10">
+        <div className="mt-14 text-center relative z-10">
             <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-neutral-500 hover:text-white text-xs font-black uppercase tracking-widest transition-colors"
+                className="text-neutral-600 text-[10px] font-black uppercase tracking-[0.3em] hover:text-white transition-colors"
             >
-                {isLogin ? "New sequence? Create account" : 'Existing entity? Login'}
+                {isLogin ? "Need a new identity? Initialize" : "Already exist? Authorize"}
             </button>
         </div>
-      </div>
 
-      <button 
-        onClick={() => dispatch(setStatus('idle'))}
-        className="mt-10 text-neutral-600 hover:text-brand-lavender text-[10px] font-black tracking-[0.3em] uppercase transition-colors"
-      >
-        Continue as Anonymous
-      </button>
+        {/* Removed Anonymous Option for Strict Policy */}
+
+      </div>
+      
+      <div className="mt-12 text-center opacity-30">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em]">Secure Tunnel 256-bit Encrypted</p>
+      </div>
     </motion.div>
   );
 };
