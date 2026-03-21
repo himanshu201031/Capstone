@@ -22,8 +22,6 @@ export const Auth: React.FC = () => {
         });
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
-        
-        // Force state refresh to App to pick up token
         window.location.reload(); 
     } catch (err: any) {
         setError(err.response?.data?.error || 'Google Login failed');
@@ -42,8 +40,6 @@ export const Auth: React.FC = () => {
         const { data } = await axios.post(`http://localhost:4000${endpoint}`, { email, password });
         localStorage.setItem('token', data.token);
         localStorage.setItem('userId', data.userId);
-        
-        // Force state refresh to App to pick up token
         window.location.reload();
     } catch (err: any) {
         setError(err.response?.data?.error || 'Authentication failed');
@@ -60,72 +56,70 @@ export const Auth: React.FC = () => {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      className="flex flex-col items-center justify-center min-h-screen pt-12 px-6 no-scrollbar selection:bg-brand-ruby/30"
+      className="flex flex-col items-center justify-center min-h-screen pt-12 px-6 no-scrollbar selection:bg-brand-orange/30 bg-neutral-50"
     >
-      <div className="w-full max-w-sm bg-neutral-900 border border-white/5 rounded-2xl p-6 md:p-8 shadow-[0_50px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
+      <div className="w-full max-w-sm bg-white border border-black/5 rounded-[2.5rem] p-8 md:p-10 shadow-2xl relative overflow-hidden">
         
-        {/* Multicolored Glow Accents */}
-        <div className="absolute top-[-10%] right-[-10%] w-24 h-24 bg-brand-lavender/10 blur-3xl rounded-full" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-24 h-24 bg-brand-ruby/10 blur-3xl rounded-full" />
+        <div className="absolute top-[-10%] right-[-10%] w-32 h-32 bg-brand-orange/5 blur-3xl rounded-full" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-32 h-32 bg-brand-blue/5 blur-3xl rounded-full" />
         
-        <div className="text-center mb-6 relative z-10">
-            <h2 className="text-xl font-black mb-1 text-white tracking-tighter leading-tight uppercase">
+        <div className="text-center mb-10 relative z-10">
+            <h2 className="text-4xl font-black mb-2 text-brand-text tracking-tighter leading-none uppercase">
                 {isLogin ? (
-                    <>Identity<br/>Vouch</>
+                    <>Identity<br/>Vouch<span className="text-brand-orange">.</span></>
                 ) : (
-                    <>New<br/>Node</>
+                    <>New<br/>Node<span className="text-brand-blue">.</span></>
                 )}
             </h2>
-            <p className="text-neutral-500 text-[10px] font-black uppercase tracking-widest mt-1">
+            <p className="text-brand-text/20 text-[10px] font-black uppercase tracking-[0.3em] mt-2">
                 {isLogin ? 'Access training matrix' : 'Sync evolution'}
             </p>
         </div>
 
-        {/* Google Login Section - Simplified & Professional */}
-        <div className="mb-6 relative z-10 flex flex-col items-center gap-4">
-             <div className="w-full flex justify-center scale-90">
+        <div className="mb-8 relative z-10 flex flex-col items-center gap-6">
+             <div className="w-full flex justify-center transform scale-110">
                  <GoogleLogin 
                     onSuccess={handleGoogleSuccess}
                     onError={() => setError('Google Sign-In Error')}
                     useOneTap
-                    theme="filled_black"
+                    theme="outline"
                     shape="pill"
-                    text={isLogin ? "continue_with" : "signup_with"}
+                    text={isLogin ? "signin_with" : "signup_with"}
                  />
              </div>
              
-             <div className="flex items-center gap-3 w-full opacity-20">
-                 <div className="h-[1px] bg-white flex-1" />
-                 <span className="text-[10px] font-black tracking-widest uppercase text-center">Encryption</span>
-                 <div className="h-[1px] bg-white flex-1" />
+             <div className="flex items-center gap-3 w-full opacity-10">
+                 <div className="h-[1px] bg-black flex-1" />
+                 <span className="text-[10px] font-black tracking-widest uppercase text-center leading-none">Secure</span>
+                 <div className="h-[1px] bg-black flex-1" />
              </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
-            <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-neutral-500 uppercase ml-1 tracking-widest">Credentials</label>
+        <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+            <div className="space-y-2">
+                <label className="text-[10px] font-black text-brand-text/30 uppercase ml-1 tracking-widest">Credentials</label>
                 <input 
                     type="email" 
                     placeholder="email@vault.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full bg-neutral-800/50 border border-white/5 p-3 rounded-lg text-white focus:outline-none focus:border-brand-lavender transition-all placeholder:text-neutral-600 font-bold text-xs"
+                    className="w-full bg-neutral-50 border border-black/5 p-4 rounded-xl text-brand-text focus:outline-none focus:border-brand-orange transition-all placeholder:text-neutral-300 font-bold text-sm shadow-inner"
                 />
             </div>
 
-            <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-neutral-500 uppercase ml-1 tracking-widest">Access Code</label>
+            <div className="space-y-2">
+                <label className="text-[10px] font-black text-brand-text/30 uppercase ml-1 tracking-widest">Access Code</label>
                 <input 
                     type="password" 
                     placeholder="••••••••" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="w-full bg-neutral-800/50 border border-white/5 p-3 rounded-lg text-white focus:outline-none focus:border-brand-lavender transition-all placeholder:text-neutral-600 font-bold text-xs"
+                    className="w-full bg-neutral-50 border border-black/5 p-4 rounded-xl text-brand-text focus:outline-none focus:border-brand-orange transition-all placeholder:text-neutral-300 font-bold text-sm shadow-inner"
                 />
             </div>
 
@@ -135,7 +129,7 @@ export const Auth: React.FC = () => {
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0 }}
-                        className="bg-brand-ruby/10 border border-brand-ruby/20 p-3 rounded-lg text-brand-ruby text-xs font-black uppercase tracking-widest text-center"
+                        className="bg-red-50 border border-red-100 p-4 rounded-xl text-red-500 text-[10px] font-black uppercase tracking-widest text-center"
                     >
                         {error}
                     </motion.div>
@@ -144,10 +138,10 @@ export const Auth: React.FC = () => {
 
             <div className="space-y-3 pt-2">
                 <motion.button 
-                    whileHover={{ scale: 1.02, backgroundColor: isLogin ? '#FFF500' : '#00F0FF' }}
+                    whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     disabled={loading}
-                    className={`w-full ${isLogin ? 'bg-brand-yellow' : 'bg-brand-cyan'} text-black font-black py-3.5 rounded-lg text-xs shadow-lg transition-colors disabled:opacity-50 tracking-widest uppercase`}
+                    className={`w-full ${isLogin ? 'bg-brand-orange' : 'bg-brand-blue'} text-white font-black py-5 rounded-xl text-xs shadow-brand-shadow-orange transition-colors disabled:opacity-50 tracking-[0.2em] uppercase`}
                 >
                     {loading ? 'PROCESSING...' : isLogin ? 'Authorize Access' : 'Initialize Node'}
                 </motion.button>
@@ -155,17 +149,17 @@ export const Auth: React.FC = () => {
                 <button 
                    type="button"
                    onClick={handleGuestLogin}
-                   className="w-full border border-dashed border-white/10 py-2.5 rounded-lg text-[10px] font-black uppercase tracking-widest text-neutral-500 hover:bg-white/5 transition-all"
+                   className="w-full border border-dashed border-black/10 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest text-brand-text/30 hover:bg-neutral-50 transition-all font-inter"
                 >
                     Guest Access Bypass
                 </button>
             </div>
         </form>
 
-        <div className="mt-6 text-center relative z-10">
+        <div className="mt-8 text-center relative z-10">
             <button 
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-neutral-600 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors"
+                className="text-brand-text/40 text-[10px] font-black uppercase tracking-widest hover:text-brand-orange transition-colors"
             >
                 {isLogin ? "Need a new identity?" : "Already exist?"}
             </button>
@@ -173,8 +167,8 @@ export const Auth: React.FC = () => {
 
       </div>
       
-      <div className="mt-6 text-center opacity-20">
-          <p className="text-[9px] font-black uppercase tracking-widest">Secure Tunnel 256-bit Encrypted</p>
+      <div className="mt-8 text-center opacity-10">
+          <p className="text-[10px] font-black uppercase tracking-widest">Secure Tunnel Established</p>
       </div>
     </motion.div>
   );
