@@ -1,16 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-orange: #FF5C00;
-  --color-brand-blue: #3B82F6;
-  --color-brand-yellow: #FFB800;
-  --color-brand-pink: #FF006B;
-  --color-brand-bg: #FFFBF9;
-  --color-brand-text: #171717;
-  --color-brand-neutral: #E5E5E5;
+  /* Cyber-Neural Palette */
+  --color-brand-yellow: #FACC15;
+  --color-brand-lavender: #C199FF;
+  --color-brand-cyan: #00F0FF;
+  --color-brand-ruby: #FF2E5B;
+  --color-brand-bg: #000000;
+  --color-brand-card: #0D0D0D;
   
   --radius-4xl: 1rem;
   --radius-5xl: 1.5rem;
+  --radius-6xl: 2.5rem;
   
   --animate-spin-slow: spin 40s linear infinite;
   --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -24,22 +25,19 @@
 
 @layer base {
   body {
-    @apply bg-brand-bg text-brand-text antialiased;
-    font-family: 'Inter', sans-serif;
+    @apply bg-brand-bg text-white antialiased selection:bg-brand-lavender/30;
+    font-family: 'Outfit', 'Inter', sans-serif;
   }
 }
 
 @layer utilities {
-  .glass-card {
-    @apply bg-white/60 backdrop-blur-3xl border border-black/5 rounded-4xl shadow-2xl;
-  }
-  .brand-shadow-orange {
-    box-shadow: 0 10px 30px -10px rgba(255, 92, 0, 0.3);
-  }
-  .brand-shadow-blue {
-    box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
+  .neural-card {
+    @apply bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-6xl shadow-2xl;
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+  .text-glow-yellow {
+    text-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
   }
 }
