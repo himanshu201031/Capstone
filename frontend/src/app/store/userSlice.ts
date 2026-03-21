@@ -6,6 +6,8 @@ interface UserState {
   lastPlayed: string | null;
   history: Record<string, number>; // date YYYY-MM-DD -> score
   badges: string[];
+  profileIcon: string;
+  name: string;
 }
 
 const initialState: UserState = {
@@ -14,6 +16,8 @@ const initialState: UserState = {
   lastPlayed: null,
   history: {},
   badges: [],
+  profileIcon: '⚡',
+  name: 'Alpha User',
 };
 
 const userSlice = createSlice({
@@ -23,25 +27,22 @@ const userSlice = createSlice({
     addScore: (state, action: PayloadAction<{ score: number; date: string }>) => {
       const { score, date } = action.payload;
       
-      // Don't count duplicate scores for the same day for streak
       const alreadyPlayedToday = !!state.history[date];
       state.history[date] = score;
       state.totalPoints += score;
       
-      // Streak Calculation
       const today = new Date().toISOString().split('T')[0];
       const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
       
       if (!alreadyPlayedToday) {
         if (state.lastPlayed === yesterday) {
             state.streak += 1;
-        } else if (state.lastPlayed !== today) {
+        } else {
             state.streak = 1;
         }
         state.lastPlayed = today;
       }
 
-      // Achievement Logic
       const addBadge = (id: string) => {
         if (!state.badges.includes(id)) state.badges.push(id);
       };
@@ -51,11 +52,15 @@ const userSlice = createSlice({
       if (state.totalPoints >= 5000) addBadge('infinite_core');
       if (Object.keys(state.history).length >= 30) addBadge('matrix_veteran');
     },
+    updateProfile: (state, action: PayloadAction<{ icon?: string; name?: string }>) => {
+        if (action.payload.icon) state.profileIcon = action.payload.icon;
+        if (action.payload.name) state.name = action.payload.name;
+    },
     loadLocalUser: (state, action: PayloadAction<UserState>) => {
       return { ...state, ...action.payload };
     }
   },
 });
 
-export const { addScore, loadLocalUser } = userSlice.actions;
+export const { addScore, loadLocalUser, updateProfile } = userSlice.actions;
 export default userSlice.reducer;

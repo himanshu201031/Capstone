@@ -24,7 +24,6 @@ export const TopNav: React.FC = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="fixed top-0 left-0 right-0 z-50 px-8 py-6 flex items-center justify-between pointer-events-none"
         >
-            {/* Logo Section */}
             <div 
                 className="flex items-center gap-3 pointer-events-auto cursor-pointer group"
                 onClick={() => dispatch(setStatus(isLoggedIn ? 'idle' : 'landing'))}
@@ -37,41 +36,34 @@ export const TopNav: React.FC = () => {
                 </h1>
             </div>
 
-            {/* Desktop Navbar - Shown only after login */}
             {isLoggedIn && status !== 'landing' && status !== 'auth' && (
                 <div className="hidden md:flex items-center gap-6 bg-white/80 backdrop-blur-xl border border-black/5 px-8 py-3 rounded-2xl shadow-xl shadow-black/5 pointer-events-auto">
-                    <span 
-                       onClick={() => dispatch(setStatus('idle'))}
-                       className={`${linkStyle} ${status === 'idle' ? 'text-brand-orange' : 'text-brand-text/40'}`}
-                    >
-                        Home
-                    </span>
-                    <span 
-                       onClick={() => dispatch(setStatus('playing'))}
-                       className={`${linkStyle} ${status === 'playing' ? 'text-brand-orange' : 'text-brand-text/40'}`}
-                    >
-                        Games
-                    </span>
-                    <span 
-                       onClick={() => dispatch(setStatus('leaderboard'))}
-                       className={`${linkStyle} ${status === 'leaderboard' ? 'text-brand-orange' : 'text-brand-text/40'}`}
-                    >
-                        Leaderboard
-                    </span>
+                    <span onClick={() => dispatch(setStatus('idle'))} className={`${linkStyle} ${status === 'idle' ? 'text-brand-orange' : 'text-brand-text/40'}`}>Home</span>
+                    <span onClick={() => dispatch(setStatus('playing'))} className={`${linkStyle} ${status === 'playing' ? 'text-brand-orange' : 'text-brand-text/40'}`}>Games</span>
+                    <span onClick={() => dispatch(setStatus('leaderboard'))} className={`${linkStyle} ${status === 'leaderboard' ? 'text-brand-orange' : 'text-brand-text/40'}`}>Leaderboard</span>
                 </div>
             )}
 
-            {/* Auth/Profile Section */}
-            <div className="flex items-center gap-4 pointer-events-auto">
+            <div className="flex items-center gap-3 pointer-events-auto">
                 {!isLoggedIn ? (
-                    <motion.button 
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => dispatch(setStatus('auth'))}
-                        className="bg-brand-text text-white text-[10px] font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-xl hover:bg-brand-orange transition-all"
-                    >
-                        Connect
-                    </motion.button>
+                    <>
+                        <motion.button 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => dispatch(setStatus('auth'))}
+                            className="bg-neutral-100 text-brand-text text-[10px] font-black uppercase tracking-widest px-6 py-3.5 rounded-xl border border-black/5 hover:bg-white transition-all shadow-sm"
+                        >
+                            Login
+                        </motion.button>
+                        <motion.button 
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => dispatch(setStatus('auth'))}
+                            className="bg-brand-orange text-white text-[10px] font-black uppercase tracking-widest px-8 py-4 rounded-xl shadow-brand-shadow-orange hover:bg-brand-text transition-all"
+                        >
+                            Register
+                        </motion.button>
+                    </>
                 ) : (
                     <div className="flex items-center gap-3">
                         <motion.div 
@@ -80,10 +72,7 @@ export const TopNav: React.FC = () => {
                         >
                             <div className="w-6 h-6 bg-brand-orange/10 rounded-lg flex items-center justify-center font-black text-[10px] text-brand-orange">A</div>
                             <span className="text-[9px] font-black text-brand-text/40 uppercase tracking-widest hidden md:inline">Alpha User</span>
-                            <button 
-                                onClick={handleLogout}
-                                className="ml-2 hover:text-red-500 transition-colors"
-                            >
+                            <button onClick={handleLogout} className="ml-2 hover:text-red-500 transition-colors">
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                             </button>
                         </motion.div>
