@@ -12,7 +12,7 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again after a minute',
 });
 
-router.post('/sync', limiter, authenticate, validateSync, async (req: AuthRequest, res) => {
+router.post('/daily-score', limiter, authenticate, validateSync, async (req: AuthRequest, res) => {
   const data = (req as any).validated;
   try {
     await prisma.dailyScore.upsert({

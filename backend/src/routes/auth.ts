@@ -101,4 +101,18 @@ router.post('/login', async (req, res) => {
   }
 });
 
+router.post('/init', async (req, res) => {
+    try {
+        const user = await prisma.user.create({
+            data: {
+                streakCount: 0,
+                totalPoints: 0
+            }
+        });
+        res.json({ userId: user.id, streak: user.streakCount });
+    } catch (e) {
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 export default router;

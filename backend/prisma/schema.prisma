@@ -13,6 +13,7 @@ model User {
   password    String?
   streakCount Int      @default(0)
   totalPoints Int      @default(0)
+  lastPlayed  DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   dailyScores DailyScore[]
@@ -29,4 +30,6 @@ model DailyScore {
   createdAt     DateTime @default(now())
   user          User     @relation(fields: [userId], references: [id])
   @@unique([userId, date])
+  @@index([userId, date], name: "idx_user_date")
+  @@index([score(sort: Desc)], name: "idx_score")
 }
