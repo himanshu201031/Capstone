@@ -11,6 +11,7 @@ import { MathSequencePuzzle } from './components/MathSequencePuzzle';
 import { BinaryLogicPuzzle } from './components/BinaryLogicPuzzle';
 import { DeductionPuzzle } from './components/DeductionPuzzle';
 import { PatternMatchingPuzzle } from './components/PatternMatchingPuzzle';
+import { LogicGridPuzzle } from './components/LogicGridPuzzle';
 import { Result } from './components/Result';
 import { Leaderboard } from './components/Leaderboard';
 import { Auth } from './components/Auth';
@@ -52,9 +53,9 @@ const App: React.FC = () => {
     }
   }, [status, isLoggedIn, dispatch]);
 
-  // Final Rotation (5 Types)
+  // Final Rotation (6 Types)
   const seed = new Date(date).getDate();
-  const puzzleTypeIndex = seed % 5;
+  const puzzleTypeIndex = seed % 6;
   
   const renderPuzzle = () => {
     switch (puzzleTypeIndex) {
@@ -63,6 +64,7 @@ const App: React.FC = () => {
         case 2: return <DeductionPuzzle key="deduction" />;
         case 3: return <BinaryLogicPuzzle key="binary" />;
         case 4: return <PatternMatchingPuzzle key="pattern" />;
+        case 5: return <LogicGridPuzzle key="logic" />;
         default: return <GridPuzzle key="grid" />;
     }
   };

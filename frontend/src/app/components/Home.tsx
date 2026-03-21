@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../store';
 import { setStatus } from '../store/puzzleSlice';
 import { updateProfile } from '../store/userSlice';
+import { Achievements } from './Achievements';
 
 const PuzzlePieceDecoration = ({ color, className, rotate = 0, delay = 0, size = 36 }: any) => (
     <motion.div 
@@ -279,6 +280,19 @@ export const Home: React.FC = () => {
                     </div>
                 </motion.div>
             </div>
+
+            {/* Achievements Section */}
+            <motion.div 
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mb-20"
+            >
+                <div className="flex items-center justify-between mb-10 px-2">
+                    <h4 className="text-[10px] font-black text-brand-text/30 uppercase tracking-[0.6em] ml-4 italic underline decoration-brand-blue decoration-2 transition-all">Neuro Badges | Achievements</h4>
+                </div>
+                <Achievements />
+            </motion.div>
 
             {/* Added: Recent Activity Feed */}
             <motion.div 
