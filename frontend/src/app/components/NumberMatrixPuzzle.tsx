@@ -4,12 +4,6 @@ import { motion } from 'framer-motion';
 import { finishPuzzle, tickTimer, useHint } from '../store/puzzleSlice';
 import { RootState } from '../store';
 
-/**
- * Number Matrix (Sudoku-lite)
- * 4x4 Grid where each row and column must contain digits 1-4 exactly once.
- * Difficulty scales with user totalPoints.
- */
-
 export const NumberMatrixPuzzle: React.FC = () => {
   const dispatch = useDispatch();
   const puzzle = useSelector((state: RootState) => state.puzzle);
@@ -19,14 +13,10 @@ export const NumberMatrixPuzzle: React.FC = () => {
   const [initialGrid, setInitialGrid] = useState<boolean[][]>([]); // true if fixed
   const [solution, setSolution] = useState<number[][]>([]);
   
-  // Levels auto-adjust based on performance (totalPoints)
   const difficultyLevel = Math.min(8, Math.floor(totalPoints / 1500));
 
   useEffect(() => {
-    // Generate a deterministic 4x4 Latin Square based on date seed
     const seed = new Date(puzzle.date).getDate();
-    
-    // Simple shift-based Latin Square generation
     const sol = [
       [1, 2, 3, 4],
       [3, 4, 1, 2],
@@ -34,7 +24,6 @@ export const NumberMatrixPuzzle: React.FC = () => {
       [4, 1, 2, 3]
     ];
     
-    // Shuffle logic
     const shuffle = (arr: any[], s: number) => {
         const result = [...arr];
         for (let i = result.length - 1; i > 0; i--) {
@@ -50,8 +39,6 @@ export const NumberMatrixPuzzle: React.FC = () => {
     const shuffledSol = rowOrder.map(r => colOrder.map(c => sol[r][c]));
     setSolution(shuffledSol);
 
-    // Progressive hiding based on difficultyLevel
-    // Higher level = more cells hidden
     const threshold = 4 + (difficultyLevel / 2);
 
     const pGrid = shuffledSol.map((row, r) => 
@@ -79,7 +66,6 @@ export const NumberMatrixPuzzle: React.FC = () => {
     newGrid[r][c] = (newGrid[r][c] % 4) + 1;
     setGrid(newGrid);
 
-    // Validation
     if (JSON.stringify(newGrid) === JSON.stringify(solution)) {
         setTimeout(() => dispatch(finishPuzzle()), 500);
     }
@@ -106,33 +92,30 @@ export const NumberMatrixPuzzle: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen pt-16 px-6 relative overflow-hidden">
-      <div className="max-w-md w-full flex justify-between items-end mb-8">
+    <div className="flex flex-col items-center justify-center min-h-screen pt-16 px-6 relative overflow-hidden bg-neutral-50">
+      <div className="max-w-md w-full flex justify-between items-end mb-8 relative z-10">
         <div className="text-left">
-          <h3 className="text-3xl font-black uppercase tracking-tighter text-white mb-1">Matrix.</h3>
-          <span className="text-xs font-black text-brand-yellow uppercase tracking-[0.2em]">Neural Sync Lvl {difficultyLevel + 1}</span>
+          <h3 className="text-3xl font-black uppercase tracking-tighter text-brand-text mb-1">Matrix.</h3>
+          <span className="text-xs font-black text-brand-orange uppercase tracking-[0.2em]">Neural Sync Lvl {difficultyLevel + 1}</span>
         </div>
         <div className="text-right">
-          <div className="text-4xl font-black tabular-nums tracking-tighter">
+          <div className="text-4xl font-black tabular-nums tracking-tighter text-brand-text">
             {Math.floor(puzzle.timeElapsed / 60).toString().padStart(2, '0')}:
             {(puzzle.timeElapsed % 60).toString().padStart(2, '0')}
           </div>
         </div>
       </div>
 
-      <div className="bg-neutral-900/60 p-4 rounded-3xl border border-white/5 backdrop-blur-2xl shadow-2xl grid grid-cols-4 gap-2 mb-8 relative">
-          {/* Difficulty Indicator glow */}
-          <div className={`absolute inset-0 rounded-3xl opacity-10 blur-2xl transition-all duration-1000 bg-brand-lavender`} />
-        
+      <div className="bg-white p-6 rounded-[2.5rem] border border-black/5 shadow-2xl grid grid-cols-4 gap-3 mb-8 relative z-10">
         {grid.map((row, r) => 
           row.map((val, c) => (
             <motion.button
               key={`${r}-${c}`}
-              whileHover={!initialGrid[r][c] ? { scale: 1.05, backgroundColor: 'rgba(255,255,255,0.05)' } : {}}
+              whileHover={!initialGrid[r][c] ? { scale: 1.05, border: '1px solid #FF5C00' } : {}}
               whileTap={!initialGrid[r][c] ? { scale: 0.95 } : {}}
               onClick={() => handleCellClick(r, c)}
-              className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center text-2xl font-black rounded-xl transition-all relative z-10 ${
-                initialGrid[r][c] ? 'bg-neutral-800 text-neutral-500' : 'bg-neutral-900 border border-white/10 text-brand-lavender'
+              className={`w-16 h-16 md:w-20 md:h-20 flex items-center justify-center text-3xl font-black rounded-2xl transition-all relative z-10 ${
+                initialGrid[r][c] ? 'bg-neutral-50 text-neutral-300' : 'bg-white border-2 border-brand-blue/10 text-brand-blue shadow-inner'
               } ${val === 0 ? 'text-transparent' : ''}`}
             >
               {val || ""}
@@ -141,11 +124,11 @@ export const NumberMatrixPuzzle: React.FC = () => {
         )}
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 relative z-10">
         <button 
             onClick={handleHint}
             disabled={puzzle.hintsRemaining <= 0}
-            className="bg-neutral-900/80 px-8 py-3 rounded-2xl border border-white/10 text-white font-black uppercase tracking-widest text-xs hover:bg-neutral-800 disabled:opacity-30 transition-all"
+            className="bg-brand-orange text-white px-10 py-4 rounded-xl shadow-brand-shadow-orange font-black uppercase tracking-widest text-xs hover:scale-105 active:scale-95 disabled:opacity-30 disabled:grayscale transition-all"
         >
             Hint ({puzzle.hintsRemaining})
         </button>

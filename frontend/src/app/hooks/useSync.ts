@@ -36,7 +36,7 @@ export const useSync = () => {
 
         for (const score of unsyncedScores) {
           // Attempt push to backend
-          await axios.post('http://localhost:4000/api/sync', {
+          await axios.post('http://localhost:4000/api/sync/daily-score', {
             userId: score.userId,
             date: score.date,
             score: score.score,

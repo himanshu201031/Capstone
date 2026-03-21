@@ -130,6 +130,7 @@ export const Landing: React.FC = () => {
           <div className="flex-[1.5]">
               <span className="text-brand-orange font-black text-xs uppercase tracking-[0.4em] mb-4 block">Engine Core</span>
               <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-8">Spatial Integrity<br/><span className="text-brand-text/30">By Design.</span></h3>
+              <h3 className="text-2xl font-black text-brand-text/30">Logic Mesh 2026.</h3>
               <p className="text-brand-text/50 font-medium text-lg leading-relaxed max-w-md">Every puzzle matrix is procedurally generated to ensure zero predictive bias and peak cognitive friction.</p>
           </div>
           
