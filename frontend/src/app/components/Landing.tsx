@@ -64,7 +64,7 @@ export const Landing: React.FC = () => {
             <span className="bg-brand-orange/10 text-brand-orange px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-8 inline-block shadow-inner border border-brand-orange/10">Engine Phase Beta</span>
             
             <h1 className="text-[5.5rem] md:text-[10rem] font-black tracking-tighter leading-[0.85] text-brand-text mb-12 hover:tracking-[-0.05em] transition-all cursor-default scale-y-[1.05]">
-                logic looper<span className="text-brand-orange">.</span>
+                Capstone<span className="text-brand-orange">.</span>
             </h1>
             
             <div className="max-w-2xl mx-auto mb-16 px-4">
@@ -129,7 +129,7 @@ export const Landing: React.FC = () => {
          className="mt-40 text-center w-full max-w-4xl px-8 py-16 bg-brand-text rounded-[3rem] text-white shadow-2xl relative overflow-hidden z-10 group"
       >
           <div className="absolute bottom-[-100px] right-[-100px] w-80 h-80 bg-brand-orange opacity-20 rounded-full blur-[100px]" />
-          <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-8 leading-tight relative z-20">Start your <span className="text-brand-orange italic">Logic Looper</span> session.</h2>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-8 leading-tight relative z-20">Start your <span className="text-brand-orange italic">Capstone</span> session.</h2>
           <motion.button 
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -142,7 +142,7 @@ export const Landing: React.FC = () => {
 
       {/* Simple Footer Link Info */}
       <div className="mt-32 w-full max-w-6xl flex flex-col md:flex-row items-center justify-between border-t border-black/5 pt-12 opacity-30 px-4">
-          <p className="text-[10px] font-black uppercase tracking-widest">© 2026 Logic Looper Engine</p>
+          <p className="text-[10px] font-black uppercase tracking-widest">© 2026 Capstone Engine</p>
       </div>
     </div>
   );

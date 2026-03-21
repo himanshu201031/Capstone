@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { finishPuzzle, tickTimer } from '../store/puzzleSlice';
 import { RootState } from '../store';
+import { HintButton } from './HintButton';
 
 const GLYPHS = ['Δ', 'Φ', 'Ω', 'Ψ', 'Σ', 'Π', 'Ξ', 'Λ'];
 
@@ -99,9 +100,35 @@ export const GridPuzzle: React.FC = () => {
             </div>
         </div>
 
-        <div className="flex flex-col items-center md:items-end">
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] mb-2 opacity-30">Synaptic Velocity</span>
-            <span className="text-5xl font-black tabular-nums tracking-tighter leading-none text-brand-text">{formatTime(puzzle.timer)}</span>
+        <div className="flex items-end gap-6">
+            <HintButton onUseHint={() => {
+                const unflipped = cards.filter(c => !c.isMatched && !c.isFlipped);
+                if (unflipped.length >= 2) {
+                    const target = unflipped[0].emoji;
+                    const pair = cards.filter(c => c.emoji === target);
+                    const newCards = [...cards];
+                    pair.forEach(p => {
+                        const idx = newCards.findIndex(c => c.id === p.id);
+                        if (idx !== -1) newCards[idx].isFlipped = true;
+                    });
+                    setCards(newCards);
+                    setTimeout(() => {
+                        const matched = [...newCards];
+                        pair.forEach(p => {
+                            const idx = matched.findIndex(c => c.id === p.id);
+                            if (idx !== -1) matched[idx].isMatched = true;
+                        });
+                        setCards(matched);
+                        if (matched.every(c => c.isMatched)) {
+                            setTimeout(() => dispatch(finishPuzzle()), 500);
+                        }
+                    }, 1000);
+                }
+            }} />
+            <div className="flex flex-col items-center md:items-end">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] mb-2 opacity-30">Synaptic Velocity</span>
+                <span className="text-5xl font-black tabular-nums tracking-tighter leading-none text-brand-text">{formatTime(puzzle.timeElapsed)}</span>
+            </div>
         </div>
       </div>
 

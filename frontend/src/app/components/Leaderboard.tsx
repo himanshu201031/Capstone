@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 interface Props {
   onBack: () => void;
@@ -56,7 +57,42 @@ const RankItem = ({ rank, name, score, delay = 0 }: any) => (
     </motion.div>
 );
 
+const DEMO_LEADERS = [
+  { user: "Cipher Matrix", score: 39500 },
+  { user: "Neural Alpha", score: 42000 },
+  { user: "Glitch Node", score: 37000 },
+  { user: "Dwayne Johnson", score: 32000 },
+  { user: "Eva Green", score: 28500 },
+  { user: "Frank Underwood", score: 21000 },
+  { user: "Alpha Dev", score: 18000 }
+];
+
 export const Leaderboard: React.FC<Props> = ({ onBack }) => {
+  const [leaders, setLeaders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLeaderboard = async () => {
+        try {
+            const res = await axios.get('http://localhost:4000/api/leaderboard?type=weekly');
+            if (res.data && res.data.length > 0) {
+                setLeaders(res.data);
+            } else {
+                setLeaders(DEMO_LEADERS.sort((a, b) => b.score - a.score));
+            }
+        } catch (e) {
+            console.error('Leaderboard Fetch Error', e);
+            setLeaders(DEMO_LEADERS.sort((a, b) => b.score - a.score));
+        } finally {
+            setLoading(false);
+        }
+    };
+    fetchLeaderboard();
+  }, []);
+
+  const top3 = leaders.slice(0, 3);
+  const remaining = leaders.slice(3, 10);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
@@ -68,7 +104,7 @@ export const Leaderboard: React.FC<Props> = ({ onBack }) => {
         <div>
             <span className="text-brand-orange font-black text-[10px] uppercase tracking-[0.5em] mb-4 block">Global Sync</span>
             <h2 className="text-6xl md:text-[5rem] font-black tracking-tighter leading-[0.85] uppercase text-brand-text">Unified<br/>Leaderboard<span className="text-brand-orange">.</span></h2>
-            <p className="text-brand-text/30 font-black uppercase text-[10px] tracking-[0.4em] mt-6">Logic Looper | Cognitive Ranking Index</p>
+            <p className="text-brand-text/30 font-black uppercase text-[10px] tracking-[0.4em] mt-6">Capstone | Cognitive Ranking Index</p>
         </div>
         <motion.button 
            whileHover={{ scale: 1.1, rotate: 90 }}
@@ -80,17 +116,25 @@ export const Leaderboard: React.FC<Props> = ({ onBack }) => {
         </motion.button>
       </div>
 
-      <div className="flex flex-col md:flex-row items-end gap-6 mb-20 px-4">
-          <PodiumItem rank={2} name="Cipher Matrix" score={39500} color="blue" icon="⚡" />
-          <PodiumItem rank={1} name="Neural Alpha" score={42000} color="orange" icon="🧠" />
-          <PodiumItem rank={3} name="Glitch Node" score={37000} color="blue" icon="💎" />
-      </div>
+      {!loading && leaders.length > 0 ? (
+          <>
+             <div className="flex flex-col md:flex-row items-end gap-6 mb-20 px-4">
+                  {top3[1] && <PodiumItem rank={2} name={top3[1].user} score={top3[1].score} color="blue" icon="⚡" />}
+                  {top3[0] && <PodiumItem rank={1} name={top3[0].user} score={top3[0].score} color="orange" icon="🧠" />}
+                  {top3[2] && <PodiumItem rank={3} name={top3[2].user} score={top3[2].score} color="blue" icon="💎" />}
+             </div>
 
-      <div className="max-w-3xl mx-auto space-y-4 px-4">
-        <RankItem rank={4} name="Dwayne Johnson" score={32000} delay={0.6} />
-        <RankItem rank={5} name="Eva Green" score={28500} delay={0.7} />
-        <RankItem rank={6} name="Frank Underwood" score={21000} delay={0.8} />
-      </div>
+             <div className="max-w-3xl mx-auto space-y-4 px-4">
+                {remaining.map((player, idx) => (
+                    <RankItem key={idx} rank={idx + 4} name={player.user} score={player.score} delay={0.6 + (idx * 0.1)} />
+                ))}
+             </div>
+          </>
+      ) : (
+          <div className="text-center font-black uppercase text-brand-text/20 tracking-widest mt-24">
+              {loading ? 'Interrogating Sync Nodes...' : 'Insufficient Data'}
+          </div>
+      )}
 
       <div className="fixed bottom-10 left-1/2 -translate-x-1/2 w-full max-w-sm px-4 z-50">
           <motion.div 

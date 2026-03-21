@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import { RootState } from './store';
@@ -19,21 +19,32 @@ import { Landing } from './components/Landing';
 import { useSync } from './hooks/useSync';
 import { setStatus } from './store/puzzleSlice';
 import { addScore } from './store/userSlice';
+import { saveScoreLocally } from './utils/idb';
 
 const App: React.FC = () => {
-  const status = useSelector((state: RootState) => state.puzzle.status);
-  const date = useSelector((state: RootState) => state.puzzle.date);
-  const score = useSelector((state: RootState) => state.puzzle.score);
+  const puzzle = useSelector((state: RootState) => state.puzzle);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
   const isLoggedIn = !!localStorage.getItem('token');
 
   // Add score to user profile when puzzle completes
   useEffect(() => {
-    if (status === 'completed' && score > 0) {
-      dispatch(addScore({ score, date }));
+    if (puzzle.status === 'completed' && puzzle.score > 0) {
+      dispatch(addScore({ score: puzzle.score, date: puzzle.date }));
+      
+      const userId = localStorage.getItem('userId') || 'guest';
+      saveScoreLocally({
+          userId,
+          date: puzzle.date,
+          score: puzzle.score,
+          timeTaken: puzzle.timeElapsed,
+          streak: user.streak,
+          hintsUsed: 3 - puzzle.hintsRemaining,
+          hintsRemaining: puzzle.hintsRemaining
+      }).catch(err => console.error("IDB Save Error", err));
     }
-  }, [status, score, date, dispatch]);
+  }, [puzzle.status, puzzle.score, puzzle.date, puzzle.timeElapsed, puzzle.hintsRemaining, user.streak, dispatch]);
 
   // Initialize syncing
   useSync();
@@ -41,22 +52,23 @@ const App: React.FC = () => {
   // Redirect if not logged in and trying to access protected states
   useEffect(() => {
     const protectedStates = ['idle', 'playing', 'leaderboard', 'completed'];
-    if (!isLoggedIn && protectedStates.includes(status)) {
+    if (!isLoggedIn && protectedStates.includes(puzzle.status)) {
         dispatch(setStatus('landing'));
     }
-  }, [status, isLoggedIn, dispatch]);
+  }, [puzzle.status, isLoggedIn, dispatch]);
 
   // Redirect if ALREADY logged in and trying to access landing/auth
   useEffect(() => {
-    if (isLoggedIn && (status === 'landing' || status === 'auth')) {
+    if (isLoggedIn && (puzzle.status === 'landing' || puzzle.status === 'auth')) {
         dispatch(setStatus('idle'));
     }
-  }, [status, isLoggedIn, dispatch]);
+  }, [puzzle.status, isLoggedIn, dispatch]);
 
   // Final Rotation (6 Types)
-  const seed = new Date(date).getDate();
-  const puzzleTypeIndex = seed % 6;
-  
+  const puzzleTypeIndex = useMemo(() => {
+      return Math.floor(Math.random() * 6);
+  }, [puzzle.status === 'playing']); // Reseed when they start playing
+
   const renderPuzzle = () => {
     switch (puzzleTypeIndex) {
         case 0: return <NumberMatrixPuzzle key="matrix" />;
@@ -81,14 +93,14 @@ const App: React.FC = () => {
       
       <main className="relative z-10 h-full w-full overflow-y-auto no-scrollbar overflow-x-hidden">
         <AnimatePresence mode="wait">
-          {status === 'landing' && <Landing key="landing" />}
-          {isLoggedIn && status === 'idle' && <Home key="home" />}
-          {isLoggedIn && status === 'playing' && renderPuzzle()}
-          {isLoggedIn && status === 'completed' && <Result key="result" />}
-          {isLoggedIn && status === 'leaderboard' && (
+          {puzzle.status === 'landing' && <Landing key="landing" />}
+          {isLoggedIn && puzzle.status === 'idle' && <Home key="home" />}
+          {isLoggedIn && puzzle.status === 'playing' && renderPuzzle()}
+          {isLoggedIn && puzzle.status === 'completed' && <Result key="result" />}
+          {isLoggedIn && puzzle.status === 'leaderboard' && (
               <Leaderboard key="lead" onBack={() => dispatch(setStatus('idle'))} />
           )}
-          {status === 'auth' && <Auth key="auth" />}
+          {puzzle.status === 'auth' && <Auth key="auth" />}
         </AnimatePresence>
       </main>
     </div>

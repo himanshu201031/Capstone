@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
-import { addPoints } from '../store/userSlice';
+import { addScore } from '../store/userSlice';
 
 const COLORS = ['#FF5C00', '#005FFF', '#FF00C1']; // Orange, Blue, Pink
 const SHAPES = ['circle', 'square', 'triangle'];
@@ -57,7 +57,7 @@ export const LogicGridPuzzle: React.FC = () => {
             setScore(prev => prev + 100 + (streak * 20));
             setStreak(prev => prev + 1);
             setFeedback('CALIBRATED');
-            dispatch(addPoints(100 + (streak * 20)));
+            dispatch(addScore({ score: 100 + (streak * 20), date: new Date().toISOString().split('T')[0] }));
             generateRound();
         } else {
             setStreak(0);

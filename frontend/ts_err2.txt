@@ -1,0 +1,7 @@
+src/app/components/DeductionPuzzle.tsx(5,10): error TS2614: Module '"../store/puzzleSlice"' has no exported member 'addScore'. Did you mean to use 'import addScore from "../store/puzzleSlice"' instead?
+src/app/components/DeductionPuzzle.tsx(62,135): error TS2367: This comparison appears to be unintentional because the types '"Yoga"' and '"Coding"' have no overlap.
+src/app/components/DeductionPuzzle.tsx(87,119): error TS2339: Property 'timer' does not exist on type 'PuzzleState'.
+src/app/components/DeductionPuzzle.tsx(87,141): error TS2339: Property 'timer' does not exist on type 'PuzzleState'.
+src/app/components/GridPuzzle.tsx(104,129): error TS2339: Property 'timer' does not exist on type 'PuzzleState'.
+src/app/components/LogicGridPuzzle.tsx(4,10): error TS2614: Module '"../store/userSlice"' has no exported member 'addPoints'. Did you mean to use 'import addPoints from "../store/userSlice"' instead?
+src/main.tsx(9,38): error TS2339: Property 'env' does not exist on type 'ImportMeta'.

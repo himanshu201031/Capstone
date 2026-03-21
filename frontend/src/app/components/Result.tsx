@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import { resetPuzzle } from '../store/puzzleSlice';
 import { RootState } from '../store';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
 export const Result: React.FC = () => {
   const dispatch = useDispatch();
   const puzzle = useSelector((state: RootState) => state.puzzle);
   const userBadges = useSelector((state: RootState) => state.user.badges);
+  const { width, height } = useWindowSize();
 
   const badgesMap: Record<string, { icon: string; name: string }> = {
     pulse_nova: { icon: '⚡', name: 'Pulse Nova' },
@@ -17,7 +20,17 @@ export const Result: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-sm mx-auto selection:bg-brand-orange/20">
+    <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-sm mx-auto selection:bg-brand-orange/20 relative">
+      <div className="absolute inset-0 pointer-events-none z-[100]">
+        <Confetti 
+            width={width} 
+            height={height} 
+            recycle={false} 
+            numberOfPieces={400} 
+            gravity={0.15}
+            colors={['#FF5C00', '#0085FF', '#FF00C7', '#FFF500']}
+        />
+      </div>
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}

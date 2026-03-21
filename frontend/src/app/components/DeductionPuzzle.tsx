@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion, AnimatePresence } from 'framer-motion';
 import { tickTimer } from '../store/puzzleSlice';
-import { addScore } from '../store/puzzleSlice';
 import { finishPuzzle } from '../store/puzzleSlice';
 import { RootState } from '../store';
 
@@ -59,7 +58,7 @@ export const DeductionPuzzle: React.FC = () => {
         isCorrect = 
             selection.Casey.hobby === 'Yoga' &&
             selection.Alex.location === 'Park' &&
-            ((selection.Blake.location === 'Lobby' && selection.Blake.hobby === 'Coding') || (selection.Casey.location === 'Lobby' && selection.Casey.hobby === 'Coding'));
+            selection.Blake.location === 'Lobby' && selection.Blake.hobby === 'Coding';
     }
 
     if (isCorrect) {
@@ -84,7 +83,7 @@ export const DeductionPuzzle: React.FC = () => {
         </div>
         <div className="bg-white px-8 py-5 rounded-2xl border border-black/5 shadow-xl">
              <span className="text-[10px] font-black uppercase text-brand-text/30 tracking-[0.2em] block mb-1">Cycle Timer</span>
-             <span className="text-2xl font-black tabular-nums tracking-tighter text-brand-orange">{Math.floor(puzzle.timer / 60)}:{(puzzle.timer % 60).toString().padStart(2, '0')}</span>
+             <span className="text-2xl font-black tabular-nums tracking-tighter text-brand-orange">{Math.floor(puzzle.timeElapsed / 60)}:{(puzzle.timeElapsed % 60).toString().padStart(2, '0')}</span>
         </div>
       </div>
 
