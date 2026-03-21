@@ -11,7 +11,7 @@ interface PuzzleState {
 }
 
 const initialState: PuzzleState = {
-  status: 'landing',
+  status: typeof window !== 'undefined' && localStorage.getItem('token') ? 'idle' : 'landing',
   date: new Date().toISOString().split('T')[0],
   hintsRemaining: 3,
   timeElapsed: 0,

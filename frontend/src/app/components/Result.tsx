@@ -7,39 +7,65 @@ import { RootState } from '../store';
 export const Result: React.FC = () => {
   const dispatch = useDispatch();
   const puzzle = useSelector((state: RootState) => state.puzzle);
+  const userBadges = useSelector((state: RootState) => state.user.badges);
+
+  const badgesMap: Record<string, { icon: string; name: string }> = {
+    pulse_nova: { icon: '⚡', name: 'Pulse Nova' },
+    iron_nexus: { icon: '🛡️', name: 'Iron Nexus' },
+    infinite_core: { icon: '💎', name: 'Infinite Core' },
+    matrix_veteran: { icon: '🕰️', name: 'Matrix Veteran' },
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 max-w-sm mx-auto">
-      {/* Visual Reference Matching Victory Card */}
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="bg-brand-yellow rounded-5xl p-10 w-full text-black shadow-2xl relative overflow-hidden"
+        className="bg-brand-yellow rounded-[2.5rem] p-8 w-full text-black shadow-2xl relative overflow-hidden"
       >
         <div className="relative z-10">
-            <span className="text-6xl mb-6 block">🔥</span>
-            <h2 className="text-4xl font-black leading-[1.1] mb-2 tracking-tighter">Puzzle Solved!</h2>
-            <p className="font-bold opacity-60 text-lg">Amazing memory speed.</p>
+            <span className="text-5xl mb-4 block">🔥</span>
+            <h2 className="text-3xl font-black leading-tight mb-1 tracking-tighter uppercase">Matrix Solved</h2>
+            <p className="font-bold opacity-40 text-sm uppercase tracking-widest">Neural link established</p>
         </div>
 
-        <div className="mt-12 space-y-4 relative z-10 w-full">
-            <div className="flex justify-between items-center bg-black/5 p-4 rounded-2xl border border-black/5">
-                <span className="font-black text-xs uppercase tracking-widest text-black/50">Score</span>
-                <span className="text-2xl font-black tracking-tighter">{puzzle.score}</span>
+        <div className="mt-8 space-y-3 relative z-10 w-full">
+            <div className="flex justify-between items-center bg-black/10 p-4 rounded-2xl border border-black/10">
+                <span className="font-black text-[9px] uppercase tracking-widest text-black/40">Score Efficiency</span>
+                <span className="text-xl font-black tracking-tighter">{puzzle.score}</span>
             </div>
-            <div className="flex justify-between items-center bg-black/5 p-4 rounded-2xl border border-black/5">
-                <span className="font-black text-xs uppercase tracking-widest text-black/50">Time</span>
-                <span className="text-2xl font-black tracking-tighter">
+            <div className="flex justify-between items-center bg-black/10 p-4 rounded-2xl border border-black/10">
+                <span className="font-black text-[9px] uppercase tracking-widest text-black/40">Temporal Drift</span>
+                <span className="text-xl font-black tracking-tighter">
                     {Math.floor(puzzle.timeElapsed / 60)}:{(puzzle.timeElapsed % 60).toString().padStart(2, '0')}
                 </span>
             </div>
         </div>
 
+        {/* Neural Accolades Small Display */}
+        {userBadges.length > 0 && (
+            <div className="mt-8 relative z-10">
+               <h4 className="text-[7px] font-black uppercase tracking-[0.3em] text-black/30 mb-3 ml-1">Rank Accolades</h4>
+               <div className="flex flex-wrap gap-2">
+                   {userBadges.map(badgeId => (
+                       <div 
+                          key={badgeId} 
+                          title={badgesMap[badgeId]?.name}
+                          className="bg-black text-brand-yellow px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg shadow-black/20"
+                       >
+                           <span className="text-xs">{badgesMap[badgeId]?.icon}</span>
+                           <span className="text-[8px] font-black uppercase tracking-tighter">{badgesMap[badgeId]?.name}</span>
+                       </div>
+                   ))}
+               </div>
+            </div>
+        )}
+
         <button 
            onClick={() => dispatch(resetPuzzle())}
-           className="w-full bg-black text-brand-yellow font-black py-4 rounded-3xl mt-12 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-black/10 relative z-10"
+           className="w-full bg-black text-brand-yellow font-black py-4 rounded-2xl mt-8 hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-black/20 relative z-10 uppercase text-xs tracking-widest"
         >
-           Return Home
+           Return to Hub
         </button>
       </motion.div>
 

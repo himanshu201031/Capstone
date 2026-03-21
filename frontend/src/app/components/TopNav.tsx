@@ -19,75 +19,93 @@ export const TopNav: React.FC = () => {
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
-        window.location.reload(); // Refresh to reset state
+        window.location.reload(); 
     };
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-[100] px-6 py-8 md:py-10 selection:bg-brand-cyan/30">
-            <div className={`max-w-7xl mx-auto flex items-center justify-between p-6 md:px-12 rounded-[2.5rem] md:rounded-[4rem] transition-all duration-700 border border-white/5 backdrop-blur-3xl shadow-2xl relative overflow-hidden ${
-                isOpen ? 'bg-neutral-900 h-[450px] md:h-auto' : 'bg-neutral-900/60 h-24 md:h-28'
+        <nav className="fixed top-0 left-0 w-full z-[100] px-4 py-3 md:py-4 selection:bg-brand-orange/20">
+            <div className={`max-w-7xl mx-auto flex items-center justify-between p-3 md:px-8 rounded-2xl md:rounded-[1.5rem] transition-all duration-700 border border-black/5 backdrop-blur-3xl shadow-lg relative overflow-hidden ${
+                isOpen ? 'bg-white h-[400px] md:h-auto' : 'bg-white/90 h-16'
             }`}>
                 
-                {/* Logo & Branding */}
+                {/* Logo & Branding - Reference: 'puzzle' */}
                 <div 
                     onClick={() => handleNav('landing')}
-                    className="flex items-center gap-4 cursor-pointer group relative z-50"
+                    className="flex items-center gap-2 cursor-pointer group relative z-50"
                 >
                     <motion.div 
-                        whileHover={{ rotate: 180 }}
-                        className="w-10 h-10 md:w-12 md:h-12 bg-brand-yellow rounded-2xl md:rounded-3xl flex items-center justify-center text-black font-black text-2xl shadow-[0_10px_30px_rgba(255,245,0,0.3)]"
+                        whileHover={{ rotate: 15, scale: 1.05 }}
+                        className="w-8 h-8 md:w-9 md:h-9 bg-brand-orange rounded-xl flex items-center justify-center text-white shadow-brand-shadow-orange"
                     >
-                        C
+                        <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M20.5,11H19V7c0-1.1-0.9-2-2-2h-4V3.5C13,2.12,11.88,1,10.5,1S8,2.12,8,3.5V5H4C2.9,5,2,5.9,2,7v4h1.5c1.38,0,2.5,1.12,2.5,2.5S4.88,16,3.5,16H2v4c0,1.1,0.9,2,2,2h4v-1.5c0-1.38,1.12-2.5,2.5-2.5s2.5,1.12,2.5,2.5V22h4c1.1,0,2-0.9,2-2v-4h1.5c1.38,0,2.5-1.12,2.5-2.5S21.88,11,20.5,11z"/></svg>
                     </motion.div>
-                    <span className="text-xl md:text-3xl font-black tracking-tighter text-white group-hover:text-brand-yellow transition-colors leading-none">CAPSTONE.</span>
+                    <div className="flex items-baseline">
+                        <span className="text-xl md:text-2xl font-black tracking-tighter text-brand-orange">p</span>
+                        <span className="text-xl md:text-2xl font-black tracking-tighter text-brand-text">uzzle.</span>
+                    </div>
                 </div>
 
-                {/* Desktop Nav Items */}
-                <div className="hidden md:flex items-center gap-12 relative z-50">
-                    {isLoggedIn ? (
-                        <>
-                            <button onClick={() => handleNav('idle')} className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500 hover:text-brand-yellow transition-all">Dashboard</button>
-                            <button onClick={() => handleNav('leaderboard')} className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-500 hover:text-brand-lavender transition-all">Ladder</button>
-                            <button onClick={() => handleNav('playing')} className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-cyan hover:text-brand-ruby transition-all">Initialize Train</button>
-                            
-                            <div className="h-4 w-px bg-white/10 mx-4" />
+                {/* Desktop Nav Items - Reference Header Links */}
+                <div className="hidden md:flex items-center gap-10 relative z-50">
+                    <button onClick={() => handleNav('landing')} className="text-sm font-bold text-brand-orange relative group/link">
+                        Home
+                        <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-brand-orange rounded-full" />
+                    </button>
+                    <button onClick={() => handleNav('idle')} className="text-sm font-bold text-brand-text/60 hover:text-brand-orange transition-all">Games</button>
+                    <button onClick={() => handleNav('leaderboard')} className="text-sm font-bold text-brand-text/60 hover:text-brand-orange transition-all">Ladder</button>
+                    <button className="text-sm font-bold text-brand-text/60 hover:text-brand-orange transition-all">Rules</button>
+                    <button className="text-sm font-bold text-brand-text/60 hover:text-brand-orange transition-all">Help</button>
+                </div>
 
-                            <div className="flex items-center gap-6">
-                                <div className="flex flex-col items-end">
-                                    <span className="text-[8px] font-black text-neutral-600 uppercase tracking-widest leading-none mb-1">STREAK</span>
-                                    <span className="text-sm font-black text-brand-yellow tracking-tighter leading-none">{streak} DAYS</span>
+                {/* Right Actions */}
+                <div className="hidden md:flex items-center gap-4 relative z-50">
+                    {isLoggedIn ? (
+                        <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-4 px-4 py-2 bg-neutral-100 rounded-full border border-black/5">
+                                <div className="flex flex-col items-center">
+                                    <span className="text-[10px] font-black text-brand-text/40 uppercase tracking-widest leading-none">STREAK</span>
+                                    <span className="text-xs font-black text-brand-orange tracking-tight">{streak}d</span>
                                 </div>
-                                <div className="flex flex-col items-end">
-                                    <span className="text-[8px] font-black text-neutral-600 uppercase tracking-widest leading-none mb-1">TOTAL</span>
-                                    <span className="text-sm font-black text-white tracking-tighter leading-none">{totalPoints} PTS</span>
+                                <div className="w-[1px] h-4 bg-black/10" />
+                                <div className="flex flex-col items-center">
+                                    <span className="text-[10px] font-black text-brand-text/40 uppercase tracking-widest leading-none">SCORE</span>
+                                    <span className="text-xs font-black text-brand-text tracking-tight">{totalPoints}</span>
                                 </div>
-                                <button 
-                                    onClick={handleLogout}
-                                    className="ml-4 p-3 bg-neutral-800 rounded-2xl hover:bg-brand-ruby/20 hover:text-brand-ruby transition-all group/logout"
-                                >
-                                     <svg className="w-5 h-5 opacity-50 group-hover/logout:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                                </button>
                             </div>
-                        </>
+                            <button 
+                                onClick={handleLogout}
+                                className="p-2.5 bg-neutral-100 rounded-xl hover:bg-brand-pink/10 hover:text-brand-pink transition-all group/logout"
+                            >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                            </button>
+                        </div>
                     ) : (
-                        <button 
-                            onClick={() => handleNav('auth')}
-                            className="bg-white text-black px-10 py-5 rounded-[2.2rem] font-black text-xs shadow-2xl hover:scale-105 active:scale-95 transition-all"
-                        >
-                            AUTHORIZE IDENTITY
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <button 
+                                onClick={() => handleNav('auth')}
+                                className="px-5 py-2 rounded-xl text-xs font-black text-brand-orange border-2 border-brand-orange hover:bg-brand-orange hover:text-white transition-all uppercase tracking-widest"
+                            >
+                                Register
+                            </button>
+                            <button 
+                                onClick={() => handleNav('auth')}
+                                className="px-5 py-2.5 rounded-xl text-xs font-black bg-brand-orange text-white shadow-brand-shadow-orange hover:scale-105 active:scale-95 transition-all uppercase tracking-widest"
+                            >
+                                Log in
+                            </button>
+                        </div>
                     )}
                 </div>
 
                 {/* Mobile Hamburger Layout */}
                 <button 
                     onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden p-4 bg-white/5 rounded-2xl relative z-50 overflow-hidden"
+                    className="md:hidden p-3 bg-neutral-100 rounded-xl relative z-50 overflow-hidden"
                 >
-                    <div className="w-8 h-8 flex flex-col justify-center gap-1.5 focus:outline-none">
-                        <motion.span animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }} className="w-full h-1 bg-white rounded-full" />
-                        <motion.span animate={{ opacity: isOpen ? 0 : 1 }} className="w-full h-1 bg-brand-yellow rounded-full" />
-                        <motion.span animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }} className="w-full h-1 bg-white rounded-full" />
+                    <div className="w-6 h-6 flex flex-col justify-center gap-1.5 focus:outline-none">
+                        <motion.span animate={{ rotate: isOpen ? 45 : 0, y: isOpen ? 6 : 0 }} className="w-full h-0.5 bg-brand-text rounded-full" />
+                        <motion.span animate={{ opacity: isOpen ? 0 : 1 }} className="w-full h-0.5 bg-brand-orange rounded-full" />
+                        <motion.span animate={{ rotate: isOpen ? -45 : 0, y: isOpen ? -6 : 0 }} className="w-full h-0.5 bg-brand-text rounded-full" />
                     </div>
                 </button>
 
@@ -98,22 +116,29 @@ export const TopNav: React.FC = () => {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="absolute inset-0 pt-32 px-10 flex flex-col gap-8 md:hidden z-40 bg-neutral-900 rounded-[2.5rem]"
+                            className="absolute inset-0 pt-24 px-8 flex flex-col gap-6 md:hidden z-40 bg-white rounded-2xl"
                         >
                              {isLoggedIn ? (
                                 <>
-                                    <button onClick={() => handleNav('idle')} className="text-2xl font-black uppercase text-left tracking-tighter">Dashboard</button>
-                                    <button onClick={() => handleNav('leaderboard')} className="text-2xl font-black uppercase text-left tracking-tighter">Ladder</button>
-                                    <button onClick={() => handleNav('playing')} className="text-2xl font-black uppercase text-left tracking-tighter text-brand-cyan">Train Node</button>
-                                    <button onClick={handleLogout} className="text-sm font-black uppercase text-left tracking-[0.3em] text-brand-ruby mt-4">Close Session ⎋</button>
+                                    <button onClick={() => handleNav('idle')} className="text-xl font-black uppercase text-left tracking-tighter">Games</button>
+                                    <button onClick={() => handleNav('leaderboard')} className="text-xl font-black uppercase text-left tracking-tighter">Ranking</button>
+                                    <button onClick={handleLogout} className="text-sm font-black uppercase text-left tracking-widest text-brand-pink mt-4">Log Out ⎋</button>
                                 </>
                             ) : (
-                                <button 
-                                    onClick={() => handleNav('auth')}
-                                    className="bg-brand-yellow text-black py-8 rounded-[2rem] font-black text-xl shadow-2xl"
-                                >
-                                    AUTHORIZE IDENTITY
-                                </button>
+                                <div className="flex flex-col gap-4">
+                                    <button 
+                                        onClick={() => handleNav('auth')}
+                                        className="bg-neutral-100 text-brand-orange py-5 rounded-2xl font-black text-lg border border-brand-orange/20"
+                                    >
+                                        REGISTER
+                                    </button>
+                                    <button 
+                                        onClick={() => handleNav('auth')}
+                                        className="bg-brand-orange text-white py-5 rounded-2xl font-black text-lg shadow-xl"
+                                    >
+                                        LOG IN
+                                    </button>
+                                </div>
                             )}
                         </motion.div>
                     )}

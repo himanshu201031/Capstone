@@ -12,7 +12,7 @@ export interface ScoreData {
   isSynced: number; // 0 for false, 1 for true
 }
 
-interface CapstoneDB extends DBSchema {
+interface LogicLooperDB extends DBSchema {
   scores: {
     key: number;
     value: ScoreData;
@@ -20,11 +20,11 @@ interface CapstoneDB extends DBSchema {
   };
 }
 
-let dbPromise: Promise<IDBPDatabase<CapstoneDB>> | null = null;
+let dbPromise: Promise<IDBPDatabase<LogicLooperDB>> | null = null;
 
 const getDB = () => {
   if (!dbPromise) {
-    dbPromise = openDB<CapstoneDB>('capstone-db', 1, {
+    dbPromise = openDB<LogicLooperDB>('logic-looper-db', 1, {
       upgrade(db) {
         const store = db.createObjectStore('scores', {
           keyPath: 'id',

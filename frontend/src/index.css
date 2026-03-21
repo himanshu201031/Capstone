@@ -1,42 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-yellow: #FFF500;
-  --color-brand-lavender: #C199FF;
-  --color-brand-cyan: #00F0FF;
-  --color-brand-ruby: #FF006B;
-  --color-brand-dark: #000000;
-  --color-brand-neutral: #1A1A1A;
+  --color-brand-orange: #FF5C00;
+  --color-brand-blue: #3B82F6;
+  --color-brand-yellow: #FFB800;
+  --color-brand-pink: #FF006B;
+  --color-brand-bg: #FFFBF9;
+  --color-brand-text: #171717;
+  --color-brand-neutral: #E5E5E5;
   
-  --radius-4xl: 2.5rem;
-  --radius-5xl: 3rem;
+  --radius-4xl: 1rem;
+  --radius-5xl: 1.5rem;
   
-  --animate-spin-slow: spin 20s linear infinite;
-  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-spin-slow: spin 40s linear infinite;
+  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   --animate-float: float 6s ease-in-out infinite;
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+    50% { transform: translateY(-15px); }
   }
 }
 
 @layer base {
   body {
-    @apply bg-black text-white antialiased;
-    font-family: 'Outfit', sans-serif;
+    @apply bg-brand-bg text-brand-text antialiased;
+    font-family: 'Inter', sans-serif;
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-neutral-950/80 backdrop-blur-3xl border border-white/5 rounded-4xl shadow-2xl;
+    @apply bg-white/60 backdrop-blur-3xl border border-black/5 rounded-4xl shadow-2xl;
   }
-  .brand-shadow-yellow {
-    box-shadow: 0 0 40px -10px rgba(255, 245, 0, 0.4);
+  .brand-shadow-orange {
+    box-shadow: 0 10px 30px -10px rgba(255, 92, 0, 0.3);
   }
-  .brand-shadow-lavender {
-    box-shadow: 0 0 40px -10px rgba(193, 153, 255, 0.4);
+  .brand-shadow-blue {
+    box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.3);
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;

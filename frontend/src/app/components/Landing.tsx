@@ -3,24 +3,41 @@ import { motion } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import { setStatus } from '../store/puzzleSlice';
 
-const FeatureCard = ({ emoji, title, desc, color }: any) => (
+const PuzzlePieceDecoration = ({ color, className, rotate = 0, delay = 0 }: any) => (
     <motion.div 
-        initial={{ y: 50, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        whileHover={{ y: -10, rotate: 1, scale: 1.02 }}
-        className={`${
-            color === 'yellow' ? 'bg-brand-yellow text-black' : 
-            color === 'cyan' ? 'bg-brand-cyan text-black' : 
-            'bg-brand-lavender text-black'
-        } rounded-5xl p-10 md:p-14 min-h-[320px] shadow-2xl flex flex-col justify-between transition-all group relative overflow-hidden`}
+        animate={{ 
+            y: [0, -15, 0],
+            rotate: [rotate, rotate + 10, rotate] 
+        }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay }}
+        className={`absolute hidden md:block w-32 h-32 ${className}`}
     >
-        <div className="absolute top-[-20%] right-[-10%] w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
-        <div className="text-6xl mb-6 relative z-10">{emoji}</div>
-        <div className="relative z-10">
-            <h4 className="text-3xl font-black mb-3 leading-none tracking-tighter uppercase">{title}</h4>
-            <p className="text-sm font-bold opacity-70 leading-relaxed max-w-[240px]">{desc}</p>
+        <svg viewBox="0 0 24 24" className={`w-full h-full ${
+            color === 'orange' ? 'text-brand-orange' : 
+            color === 'blue' ? 'text-brand-blue' : 
+            color === 'pink' ? 'text-brand-pink' : 'text-brand-yellow'
+        } fill-current drop-shadow-xl`}><path d="M20.5,11H19V7c0-1.1-0.9-2-2-2h-4V3.5C13,2.12,11.88,1,10.5,1S8,2.12,8,3.5V5H4C2.9,5,2,5.9,2,7v4h1.5c1.38,0,2.5,1.12,2.5,2.5S4.88,16,3.5,16H2v4c0,1.1,0.9,2,2,2h4v-1.5c0-1.38,1.12-2.5,2.5-2.5s2.5,1.12,2.5,2.5V22h4c1.1,0,2-0.9,2-2v-4h1.5c1.38,0,2.5-1.12,2.5-2.5S21.88,11,20.5,11z"/></svg>
+    </motion.div>
+);
+
+const FeatureCard = ({ icon, title, desc, color, delay = 0 }: any) => (
+    <motion.div 
+        initial={{ y: 30, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay, duration: 0.8 }}
+        whileHover={{ y: -5 }}
+        className="bg-white rounded-[2rem] p-8 border border-black/5 shadow-xl transition-all group relative overflow-hidden"
+    >
+        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-lg ${
+            color === 'orange' ? 'bg-brand-orange/10 text-brand-orange' : 
+            color === 'blue' ? 'bg-brand-blue/10 text-brand-blue' : 
+            'bg-brand-pink/10 text-brand-pink'
+        }`}>
+            {icon}
         </div>
+        <h4 className="text-xl font-black mb-3 leading-none tracking-tight text-brand-text">{title}</h4>
+        <p className="text-sm font-medium text-brand-text/50 leading-relaxed">{desc}</p>
     </motion.div>
 );
 
@@ -28,138 +45,126 @@ export const Landing: React.FC = () => {
   const dispatch = useDispatch();
 
   return (
-    <div className="min-h-screen relative flex flex-col items-center pt-40 px-6 md:px-20 pb-40 no-scrollbar overflow-x-hidden selection:bg-brand-cyan/30">
+    <div className="flex flex-col items-center min-h-screen pt-32 pb-20 px-6 md:px-12 select-none no-scrollbar relative overflow-hidden selection:bg-brand-orange/20">
       
-      {/* Hero Section - Decreased font size & Scroll Entrance */}
-      <div className="w-full max-w-7xl flex flex-col md:flex-row items-center justify-between gap-24 relative z-10">
+      {/* Decorative Puzzle Pieces - Reference Layout */}
+      <PuzzlePieceDecoration color="blue" className="top-[15%] left-[2%]" rotate={-20} />
+      <PuzzlePieceDecoration color="orange" className="top-[40%] left-[8%]" rotate={15} delay={1} />
+      <PuzzlePieceDecoration color="yellow" className="bottom-[15%] left-[4%]" rotate={-10} delay={2} />
+
+      <PuzzlePieceDecoration color="pink" className="top-[20%] right-[3%]" rotate={25} delay={0.5} />
+      <PuzzlePieceDecoration color="orange" className="top-[55%] right-[10%]" rotate={-15} delay={1.5} />
+      <PuzzlePieceDecoration color="blue" className="bottom-[20%] right-[5%]" rotate={10} delay={2.5} />
+
+      {/* Hero Section - Reference: puzzle title style */}
+      <div className="w-full max-w-4xl flex flex-col items-center text-center relative z-10">
           <motion.div 
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="flex-1 text-center md:text-left"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1, ease: "easeOut" }}
           >
-            <motion.span 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="bg-brand-ruby/10 text-brand-ruby border border-brand-ruby/20 px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.5em] mb-10 inline-block backdrop-blur-3xl shadow-xl shadow-brand-ruby/5"
-            >
-                Neural Training V2.0
-            </motion.span>
-            
-            <h1 className="text-6xl md:text-[7rem] font-extrabold tracking-tighter leading-[0.85] text-white mb-10">
-                MASTER THE<br/>DAILY<br/><span className="text-brand-yellow">UNKNOWN</span>
+            <h1 className="text-7xl md:text-[8.5rem] font-black tracking-tighter leading-none text-brand-text mb-8">
+                puzzle.
             </h1>
             
-            <p className="text-neutral-400 text-lg md:text-xl font-medium max-w-2xl md:max-w-lg mx-auto md:mx-0 mb-14 leading-relaxed opacity-80">
-                Unlock peak cognitive performance through the world's most immersive spatial memory engine. Integrated with advanced neural metrics.
-            </p>
+            <div className="max-w-xl mx-auto mb-10">
+                <p className="text-xl md:text-3xl font-black text-brand-text/80 leading-tight mb-4">
+                    Get an amazing new <br/>
+                    <span className="text-brand-orange">play game experience</span>
+                </p>
+                <p className="text-sm md:text-base font-medium text-brand-text/40 leading-relaxed max-w-md mx-auto">
+                    Cognitive training re-imagined through vibrant spatial puzzles. Synchronize your brain nodes in a world of color and logic.
+                </p>
+            </div>
 
-            <div className="flex flex-col sm:flex-row gap-8 justify-center md:justify-start items-center">
+            <div className="flex flex-col items-center gap-6">
                 <motion.button 
-                    whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.15)" }}
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => dispatch(setStatus('auth'))}
-                    className="w-full sm:w-auto bg-white text-black px-20 py-7 rounded-[2.5rem] font-black text-xl shadow-2xl transition-all"
+                    className="bg-brand-orange text-white px-12 py-4 rounded-2xl font-black text-lg shadow-brand-shadow-orange transition-all uppercase tracking-widest"
                 >
-                    GET STARTED
+                    Play Now
                 </motion.button>
-                <div className="group cursor-pointer">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-600 group-hover:text-brand-cyan transition-colors">Learn Mechanics</span>
-                    <div className="h-0.5 w-full bg-neutral-900 mt-1 overflow-hidden">
-                        <motion.div initial={{ x: '-100%' }} whileHover={{ x: '0%' }} className="h-full bg-brand-cyan" />
-                    </div>
+                <div className="flex items-center gap-1 opacity-40">
+                    <span className="text-[10px] font-black tracking-widest text-brand-text uppercase">Scroll to learn more</span>
+                    <svg className="w-4 h-4 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </div>
             </div>
           </motion.div>
-
-          {/* Kinetic Decoration - Dynamic Pulse & Rotation */}
-          <motion.div 
-            initial={{ scale: 0.5, opacity: 0, rotate: -20 }}
-            animate={{ scale: 1, opacity: 1, rotate: 0 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="hidden md:flex flex-1 justify-center relative scale-110"
-          >
-               <div className="w-[550px] h-[550px] rounded-full border-[80px] border-white/5 relative flex items-center justify-center animate-spin-slow">
-                   <motion.div animate={{ rotate: 360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute inset-[-40px] rounded-full border border-dashed border-white/10" />
-                   <div className="absolute top-0 left-[225px] w-14 h-14 bg-brand-yellow rounded-[2rem] shadow-2xl shadow-brand-yellow/30 animate-pulse-slow" />
-                   <div className="absolute bottom-0 right-[225px] w-14 h-14 bg-brand-ruby rounded-[2rem] shadow-2xl shadow-brand-ruby/30" />
-                   <div className="absolute left-0 top-[225px] w-14 h-14 bg-brand-cyan rounded-[2rem] shadow-2xl shadow-brand-cyan/30" />
-               </div>
-               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                   <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 5, repeat: Infinity }} className="text-[15rem] filter blur-xl opacity-10 select-none">💠</motion.div>
-               </div>
-          </motion.div>
       </div>
 
-      {/* Feature Section with Invis-View Animations */}
-      <div className="mt-60 w-full grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl">
+      {/* Feature Section with Premium Cards */}
+      <div className="mt-64 w-full grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl relative z-10">
           <FeatureCard 
-              emoji="⚡" 
-              title="Hyper Pulse" 
-              desc="Rapid-fire memory nodes that adapt to your unique neural response speed in real-time." 
-              color="lavender"
+              icon="⚡" 
+              title="Neural Pulse" 
+              desc="Experience real-time calibration of spatial cognitive nodes in our high-energy matrix." 
+              color="blue"
           />
           <FeatureCard 
-              emoji="🕹️" 
-              title="Matrix Sync" 
-              desc="Universal progress synchronization via identity-linked cloud matrices. Play anywhere." 
-              color="yellow"
+              icon="🧩" 
+              title="Sync Logic" 
+              desc="Dynamic procedural puzzles engineered to amplify neural plastic performance." 
+              color="orange"
+              delay={0.2}
           />
           <FeatureCard 
-              emoji="💎" 
-              title="Vault Elite" 
-              desc="Exclusive rank-tier challenges. Only the top 5% of global minds unlock the Vault." 
-              color="cyan"
+              icon="💎" 
+              title="Master Archive" 
+              desc="Secure retrieval of your cognitive progression and global rank metrics." 
+              color="pink"
+              delay={0.4}
           />
       </div>
 
-      {/* New Tech Section - High Energy UI */}
+      {/* Technical Integration Section */}
       <motion.div 
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        className="mt-60 w-full max-w-7xl flex flex-col md:flex-row items-center gap-32 p-16 md:p-24 bg-neutral-900/60 rounded-[5rem] border border-white/5 shadow-2xl backdrop-blur-3xl relative overflow-hidden"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mt-40 w-full max-w-6xl flex flex-col md:flex-row items-center gap-12 p-10 md:p-16 bg-white rounded-[3rem] border border-black/5 shadow-2xl relative overflow-hidden group z-10"
       >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-cyan to-transparent opacity-30" />
+          <div className="absolute top-0 right-[-10%] w-64 h-64 bg-brand-orange/5 rounded-full blur-[100px]" />
           
-          <div className="flex-1">
-              <span className="text-brand-cyan font-black text-[10px] uppercase tracking-[0.5em] mb-6 block">Neural Integrity</span>
-              <h3 className="text-5xl md:text-7xl font-black tracking-tighter leading-none mb-10">THE CORE OF<br/>PRECISION.</h3>
-              <p className="text-neutral-500 font-bold leading-relaxed max-w-sm mb-12">Our algorithm ensures every daily matrix is unique, untraceable, and mathematically balanced for peak training.</p>
-              <div className="flex gap-4">
-                  <div className="w-4 h-4 rounded-full bg-brand-cyan animate-pulse" />
-                  <div className="w-4 h-4 rounded-full bg-brand-yellow" />
-                  <div className="w-4 h-4 rounded-full bg-brand-ruby" />
-              </div>
+          <div className="flex-[1.5]">
+              <span className="text-brand-orange font-black text-xs uppercase tracking-[0.4em] mb-4 block">Engine Core</span>
+              <h3 className="text-4xl md:text-6xl font-black tracking-tighter leading-none mb-8">Spatial Integrity<br/><span className="text-brand-text/30">By Design.</span></h3>
+              <p className="text-brand-text/50 font-medium text-lg leading-relaxed max-w-md">Every puzzle matrix is procedurally generated to ensure zero predictive bias and peak cognitive friction.</p>
           </div>
           
-          <div className="flex-1 grid grid-cols-2 gap-6 w-full">
-              {[1,2,3,4].map(i => (
-                  <motion.div key={i} whileHover={{ y: -5 }} className="bg-white/5 p-8 rounded-4xl border border-white/5 flex items-center justify-center text-3xl opacity-50 hover:opacity-100 transition-opacity">
-                      {['🔗', '📡', '🛡️', '🛰️'][i-1]}
-                  </motion.div>
+          <div className="flex-1 grid grid-cols-2 gap-4 w-full">
+              {['SYNC', 'CORE', 'MODE', 'RANK'].map((txt, i) => (
+                  <div 
+                    key={txt} 
+                    className="bg-neutral-50 p-8 rounded-3xl border border-black/5 flex flex-col items-center justify-center gap-3 transition-all hover:bg-white hover:shadow-lg group/box"
+                  >
+                      <span className="text-3xl filter grayscale group-hover/box:grayscale-0 transition-all">{['🔗', '🧩', '🚀', '⭐'][i]}</span>
+                      <span className="text-[10px] font-black text-brand-text/40 tracking-widest uppercase">{txt}</span>
+                  </div>
               ))}
           </div>
       </motion.div>
 
-      {/* Enhanced Footer */}
+      {/* Ready to Play Footer */}
       <motion.div 
-         initial={{ opacity: 0, scale: 0.9 }}
+         initial={{ opacity: 0, scale: 0.95 }}
          whileInView={{ opacity: 1, scale: 1 }}
-         transition={{ duration: 1 }}
-         className="mt-60 text-center w-full max-w-5xl px-10 py-24 bg-gradient-to-b from-neutral-900/80 to-transparent rounded-[6rem] border-t border-white/10"
+         className="mt-40 text-center w-full max-w-5xl px-8 py-24 bg-brand-text rounded-[3.5rem] text-white shadow-3xl relative overflow-hidden z-10"
       >
-          <h5 className="text-5xl md:text-8xl font-black tracking-tighter mb-12 leading-none uppercase">Join the Matrix<br/><span className="text-brand-cyan italic">Initiative</span></h5>
-          <button 
+          <div className="absolute bottom-[-100px] right-[-100px] w-80 h-80 bg-brand-orange opacity-20 rounded-full blur-[120px]" />
+          <div className="absolute top-[-50px] left-[-50px] w-64 h-64 bg-brand-blue opacity-10 rounded-full blur-[100px]" />
+          
+          <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-10 leading-none">Ready to start <br/>your <span className="text-brand-orange italic">puzzle</span> session?</h2>
+          
+          <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => dispatch(setStatus('auth'))}
-              className="px-20 py-8 rounded-[3rem] bg-brand-lavender text-black font-black text-2xl hover:scale-105 active:scale-95 transition-all shadow-[0_30px_60px_rgba(193,153,255,0.3)]"
+              className="px-12 py-4 rounded-xl bg-brand-orange text-white font-black text-lg shadow-xl uppercase tracking-widest"
           >
-              Create Identity
-          </button>
-          <div className="mt-20 flex justify-center gap-16">
-              {['Security', 'Privacy', 'Compliance', 'Metrics'].map(txt => (
-                  <span key={txt} className="text-[10px] font-black text-neutral-600 uppercase tracking-[0.3em]">{txt}</span>
-              ))}
-          </div>
+              Get Started Now
+          </motion.button>
       </motion.div>
     </div>
   );
