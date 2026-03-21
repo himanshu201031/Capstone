@@ -1,43 +1,30 @@
 @import "tailwindcss";
 
 @theme {
-  /* Cyber-Neural Palette */
-  --color-brand-yellow: #FACC15;
-  --color-brand-lavender: #C199FF;
-  --color-brand-cyan: #00F0FF;
-  --color-brand-ruby: #FF2E5B;
-  --color-brand-bg: #000000;
-  --color-brand-card: #0D0D0D;
+  --color-brand-orange: #FF5C00;
+  --color-brand-blue: #0085FF;
+  --color-brand-pink: #FF00C7;
+  --color-brand-yellow: #FFF500;
+  --color-brand-text: #1A1A1A;
   
-  --radius-4xl: 1rem;
-  --radius-5xl: 1.5rem;
-  --radius-6xl: 2.5rem;
+  --shadow-brand-shadow-orange: 0 10px 40px -10px rgba(255, 92, 0, 0.5);
+  --shadow-brand-shadow-blue: 0 10px 40px -10px rgba(0, 133, 255, 0.5);
   
-  --animate-spin-slow: spin 40s linear infinite;
-  --animate-pulse-slow: pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  --animate-float: float 6s ease-in-out infinite;
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-  }
+  --font-sans: 'Inter', system-ui, sans-serif;
 }
 
 @layer base {
   body {
-    @apply bg-brand-bg text-white antialiased selection:bg-brand-lavender/30;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    @apply bg-neutral-50 text-brand-text;
   }
 }
 
 @layer utilities {
-  .neural-card {
-    @apply bg-neutral-900/40 backdrop-blur-3xl border border-white/5 rounded-6xl shadow-2xl;
-  }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-  .text-glow-yellow {
-    text-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }

@@ -67,44 +67,14 @@ const App: React.FC = () => {
     }
   };
 
-  // Use dark mode as the default core palette.
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-brand-lavender/30 font-sans antialiased overflow-hidden">
+    <div className="min-h-screen bg-neutral-50 text-brand-text selection:bg-brand-orange/20 font-sans antialiased overflow-hidden">
       <TopNav />
       
-      {/* Immersive Neural Mesh Atmosphere */}
+      {/* Decorative Atmosphere Decorations */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden select-none">
-          <div className="absolute top-[-20%] right-[-10%] w-[70%] h-[70%] bg-brand-lavender/10 blur-[120px] rounded-full animate-pulse-slow" />
-          <div className="absolute bottom-[-10%] left-[-5%] w-[50%] h-[50%] bg-brand-cyan/5 blur-[100px] rounded-full" />
-          <div className="absolute top-[20%] left-[10%] w-[30%] h-[30%] bg-brand-ruby/5 blur-[80px] rounded-full animate-pulse-slow" />
-          
-          {/* Floating Neural Nodes - Enhanced replacement for old ring model */}
-          <motion.div 
-            animate={{ 
-                y: [0, -30, 0], 
-                rotate: [0, 45, 0],
-                opacity: [0.1, 0.2, 0.1] 
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[15%] right-[20%] w-64 h-64 border border-white/5 rounded-[4rem] rotate-12"
-          />
-          <motion.div 
-            animate={{ 
-                x: [0, 20, 0], 
-                rotate: [0, -90, 0],
-                opacity: [0.05, 0.1, 0.05] 
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-[20%] left-[15%] w-96 h-96 border border-white/5 rounded-full"
-          />
-          <motion.div 
-            animate={{ 
-                scale: [1, 1.1, 1],
-                opacity: [0.1, 0.2, 0.1] 
-            }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-[40%] left-[45%] w-32 h-32 bg-brand-yellow/5 blur-3xl rounded-full"
-          />
+          <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-brand-orange/5 blur-[100px] rounded-full" />
+          <div className="absolute bottom-[-5%] left-[-5%] w-[30%] h-[30%] bg-brand-blue/5 blur-[80px] rounded-full" />
       </div>
       
       <main className="relative z-10 h-full w-full overflow-y-auto no-scrollbar overflow-x-hidden">
