@@ -29,10 +29,10 @@ export const TopNav: React.FC = () => {
                 onClick={() => dispatch(setStatus(isLoggedIn ? 'idle' : 'landing'))}
             >
                 <div className="w-10 h-10 bg-brand-orange flex items-center justify-center rounded-xl shadow-brand-shadow-orange group-hover:rotate-12 group-hover:scale-110 transition-all">
-                    <span className="text-white font-black text-xs leading-none">LL</span>
+                    <span className="text-white font-black text-xs leading-none">CP</span>
                 </div>
                 <h1 className="text-xl font-black tracking-tighter text-brand-text group-hover:text-brand-orange transition-colors">
-                    logic looper<span className="text-brand-orange">.</span>
+                    Capstone<span className="text-brand-orange">.</span>
                 </h1>
             </div>
 
